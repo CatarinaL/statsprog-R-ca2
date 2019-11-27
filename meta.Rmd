@@ -1,0 +1,130 @@
+---
+title: 'CA2: Process and steps'
+author: "Catarina Lourenço"
+date: "27/11/2019"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## CA 2 Instructions
+### Programming with R
+
+> You will write a program (R script) which imports, joins and transforms some advertising data. 
+Hypothetically this program will run daily on the latest version of the data, so this is not a one-off, discardable analysis script. It should be well documented with comments, and use functions / pipes to make your code as clearly understandable as possible. There are lots of good articles online about how to approach writing good comments. Significant marks are awarded for readability/understandability: see the Rubric for more information.
+
+### Resources
+
+* RStudio development environment 
+
+* Github and Git
+
+* Lecture notes in Brightspace
+
+* [Tidyverse package from CRAN](https://www.tidyverse.org/). In the lab you may need to activate some / all of these individual packages that are part of Tidyverse:
+
+  + library(tibble)
+  + library(readr)
+  + library(dplyr)
+  + library(tidyr)
+  + library(magrittr)
+  + library(ggplot2)
+
+* [R for data science](http://r4ds.had.co.nz/)
+
+
+
+### Dataset
+Download a sample data set at this link. This is representative of the data sets that will be analysed daily, although they will be much larger.
+
+***
+
+### Solution 
+
+
+#### 1. Import
+Extract the sample data-set zip file to a folder. Your program does not need to extract the zip file, but it should import the four files without any modification by any other program.
+
+
+
+#### 2. Transform
+_Impression_ and _click_ data both have date, time and timezone variables. Transform dates and times so that all data that the program outputs is in the UTC time zone.
+You must write the logic for this transformation yourself. Using a 3rd party package such as lubridate will be heavily penalised (see Rubric).
+
+You can use existing R functions to parse the elements out of a timestamp e.g. hour or date, however you must write the code that adds/subtracts hours, days etc. 
+
+
+
+#### 3. Join
+Add all columns from advertisers and campaigns into the _impression_ and _click_ data.
+
+
+
+#### 4. Output
+After processing the data the program should write two CSV files _impressions_processed.csv_ and _clicks_processed.csv_
+
+***
+
+```{R, echo=FALSE, include=FALSE}
+# Install Tidyverse from CRAN
+# install.packages("tidyverse")
+
+# Load necessary libraries
+library(tibble)
+library(readr)
+library(dplyr)
+library(tidyr)
+library(magrittr)
+#library(ggplot2)
+
+```
+
+* Step 1, importing files with correct column specifications:
+
+```{R, echo=TRUE, include=TRUE}
+# Load files into tibbles (using readr functions)
+# col_types(): Manually define data type of each column as necessary
+
+advertisers <- read_csv("data/advertiser.csv", 
+                        col_types = 
+                          cols(
+                            ID = col_character() #amend parser guess (double) to string
+                            )
+                        )
+
+campaigns <- read_csv("data/campaigns.csv" , 
+                        col_types = 
+                          cols(
+                            id = col_character(),
+                            advertiser_id = col_character()
+                            )
+                      )
+
+clicks <- read_tsv("data/clicks.tsv", 
+                        col_types = 
+                          cols(
+                            campaign_id = col_character(),
+                            date = col_date(format = "%d/%m/%Y") 
+                            #date format needs to be specified because the original doesn't conform to ISO standard
+                            )
+                   )
+
+impressions <- read_tsv("data/impressions.tsv", 
+                        col_types = 
+                          cols(
+                            campaign_id = col_character(),
+                            date = col_date(format = "%d/%m/%Y")
+                            )
+                        )
+
+```
+
+See readr's (reference on parsing dates and times)[https://readr.tidyverse.org/reference/parse_datetime.html] 
+
+
+```{R, echo=FALSE, include=TRUE}
+
+```
+
