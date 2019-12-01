@@ -208,7 +208,10 @@ clicks2$new_dates = new_dates
 
 #hours <- format(strptime(clicks$time,"%H:%M:%S"),'%H')
 
-new_clicks <- mutate(clicks, time=clicks2$new_time, date=clicks2$new_dates, timezone="UTC") %>% left_join(campaigns, by = c("campaign_id" = "id")) %>% left_join(advertisers, by = c("advertiser_id" = "ID")) %>% rename(campaign_name = name.x, advertiser_name = name.y)
+new_clicks <- mutate(clicks, time=clicks2$new_time, date=clicks2$new_dates, timezone="UTC") %>% 
+  left_join(campaigns, by = c("campaign_id" = "id")) %>% 
+  left_join(advertisers, by = c("advertiser_id" = "ID")) %>% 
+  rename(campaign_name = name.x, advertiser_name = name.y)
 
 write_csv(new_clicks, "clicks_processed.csv")
 
