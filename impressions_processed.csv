@@ -1,0 +1,35 @@
+campaign_id,date,time,timezone,advertiser_id,campaign_name,budget,advertiser_name
+99870,2018-11-01,00:01:00,UTC,11354,Christmas cheer,15000,Coco Cola
+99870,2018-11-06,20:07:00,UTC,11354,Christmas cheer,15000,Coco Cola
+99870,2018-11-06,03:37:00,UTC,11354,Christmas cheer,15000,Coco Cola
+99870,2018-11-03,16:34:00,UTC,11354,Christmas cheer,15000,Coco Cola
+99870,2018-11-05,09:09:00,UTC,11354,Christmas cheer,15000,Coco Cola
+99870,2018-11-02,21:55:00,UTC,11354,Christmas cheer,15000,Coco Cola
+99870,2018-11-07,05:30:00,UTC,11354,Christmas cheer,15000,Coco Cola
+56444,2018-11-03,14:56:00,UTC,73453,Run of network,1000,Ninetendo
+56444,2018-11-03,14:10:00,UTC,73453,Run of network,1000,Ninetendo
+56444,2018-11-05,20:58:00,UTC,73453,Run of network,1000,Ninetendo
+56444,2018-11-03,07:39:00,UTC,73453,Run of network,1000,Ninetendo
+56444,2018-11-03,05:36:00,UTC,73453,Run of network,1000,Ninetendo
+56444,2018-11-03,16:40:00,UTC,73453,Run of network,1000,Ninetendo
+56444,2018-11-02,13:45:00,UTC,73453,Run of network,1000,Ninetendo
+56444,2018-11-04,15:46:00,UTC,73453,Run of network,1000,Ninetendo
+56444,2018-11-04,22:19:00,UTC,73453,Run of network,1000,Ninetendo
+56444,2018-11-04,03:43:00,UTC,73453,Run of network,1000,Ninetendo
+56444,2018-11-05,07:31:00,UTC,73453,Run of network,1000,Ninetendo
+56444,2018-11-03,08:57:00,UTC,73453,Run of network,1000,Ninetendo
+56444,2018-11-03,13:13:00,UTC,73453,Run of network,1000,Ninetendo
+55112,2018-11-02,07:05:00,UTC,34523,Q4 performance,250000,Lever Brows
+55112,2018-11-04,07:52:00,UTC,34523,Q4 performance,250000,Lever Brows
+55112,2018-11-05,23:34:00,UTC,34523,Q4 performance,250000,Lever Brows
+55112,2018-11-04,08:29:00,UTC,34523,Q4 performance,250000,Lever Brows
+55112,2018-11-03,06:57:00,UTC,34523,Q4 performance,250000,Lever Brows
+55112,2018-11-05,16:52:00,UTC,34523,Q4 performance,250000,Lever Brows
+55112,2018-11-05,13:38:00,UTC,34523,Q4 performance,250000,Lever Brows
+55112,2018-11-03,06:31:00,UTC,34523,Q4 performance,250000,Lever Brows
+55112,2018-11-05,19:31:00,UTC,34523,Q4 performance,250000,Lever Brows
+55112,2018-11-04,20:08:00,UTC,34523,Q4 performance,250000,Lever Brows
+13354,2018-11-05,12:47:00,UTC,11354,Run of network,9000,Coco Cola
+13354,2018-11-04,20:17:00,UTC,11354,Run of network,9000,Coco Cola
+13354,2018-11-03,16:26:00,UTC,11354,Run of network,9000,Coco Cola
+13354,2018-11-04,01:38:00,UTC,11354,Run of network,9000,Coco Cola

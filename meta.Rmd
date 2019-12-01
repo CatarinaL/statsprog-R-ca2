@@ -153,7 +153,7 @@ get_mins_secs <- function(x){
   format(strptime(x, "%H:%M:%S"),'%M:%S')
 }
 
-new_clicks <- mutate(clicks, hours = format(strptime(clicks$time, "%H:%M:%S"),'%H'))
+#new_clicks <- mutate(clicks, hours = format(strptime(clicks$time, "%H:%M:%S"),'%H'))
 # 
 # new_clicks <- mutate(new_clicks, hours2 = EST_to_UTC(new_clicks$hours))
 
@@ -215,7 +215,20 @@ write_csv(new_clicks, "clicks_processed.csv")
 ```
 
 
+```{r}
 
+new_times_i <- apply(impressions, 1, convert_timezone)
+impressions2 <- mutate(impressions, new_time=new_times_i) 
+new_dates_i <- apply(impressions2, 1, convert_dates)
+impressions2$new_dates = new_dates_i
+
+new_impressions <- mutate(clicks, time=clicks2$new_time, date=clicks2$new_dates, timezone="UTC") %>% left_join(campaigns, by = c("campaign_id" = "id")) %>% left_join(advertisers, by = c("advertiser_id" = "ID")) %>% rename(campaign_name = name.x, advertiser_name = name.y)
+
+write_csv(new_impressions, "impressions_processed.csv")
+
+```
+
+```
 
 #### 3. Join
 Add all columns from advertisers and campaigns into the _impression_ and _click_ data.

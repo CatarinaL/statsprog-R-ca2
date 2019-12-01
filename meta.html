@@ -404,23 +404,12 @@ summary {
 <h3>Solution</h3>
 <div id="import" class="section level4">
 <h4>1. Import</h4>
+<blockquote>
 <p>Extract the sample data-set zip file to a folder. Your program does not need to extract the zip file, but it should import the four files without any modification by any other program.</p>
-</div>
-<div id="transform" class="section level4">
-<h4>2. Transform</h4>
-<p><em>Impression</em> and <em>click</em> data both have date, time and timezone variables. Transform dates and times so that all data that the program outputs is in the UTC time zone. You must write the logic for this transformation yourself. Using a 3rd party package such as lubridate will be heavily penalised (see Rubric).</p>
-<p>You can use existing R functions to parse the elements out of a timestamp e.g. hour or date, however you must write the code that adds/subtracts hours, days etc.</p>
-</div>
-<div id="join" class="section level4">
-<h4>3. Join</h4>
-<p>Add all columns from advertisers and campaigns into the <em>impression</em> and <em>click</em> data.</p>
-</div>
-<div id="output" class="section level4">
-<h4>4. Output</h4>
-<p>After processing the data the program should write two CSV files <em>impressions_processed.csv</em> and <em>clicks_processed.csv</em></p>
-<hr />
+</blockquote>
 <ul>
-<li>Step 1, importing files with correct column specifications:</li>
+<li><p>Set up the libraries used.</p></li>
+<li><p>Importing files with correct column specifications:</p></li>
 </ul>
 <pre class="r"><code># Load files into tibbles (using readr functions)
 # col_types(): Manually define data type of each column as necessary
@@ -457,6 +446,41 @@ impressions &lt;- read_tsv(&quot;data/impressions.tsv&quot;,
                             )
                         )</code></pre>
 <p>See readr’s (reference on parsing dates and times)[<a href="https://readr.tidyverse.org/reference/parse_datetime.html" class="uri">https://readr.tidyverse.org/reference/parse_datetime.html</a>]</p>
+<hr />
+</div>
+<div id="transform" class="section level4">
+<h4>2. Transform</h4>
+<blockquote>
+<p><em>Impression</em> and <em>click</em> data both have date, time and timezone variables. Transform dates and times so that all data that the program outputs is in the UTC time zone. You must write the logic for this transformation yourself. Using a 3rd party package such as lubridate will be heavily penalised (see Rubric).</p>
+</blockquote>
+<blockquote>
+<p>You can use existing R functions to parse the elements out of a timestamp e.g. hour or date, however you must write the code that adds/subtracts hours, days etc.</p>
+</blockquote>
+<p>Three columns of interest: time, date and timezone.</p>
+<ul>
+<li><p>2.1. Filter rows by timezones:</p>
+<ul>
+<li>3 types of timezone: UTC, Eastern Time (EST) and Pacific Time (PST).</li>
+<li>PST time zone offset is UTC-08.</li>
+<li>EST is UTC-05.</li>
+<li>To transform these to UTC, I need to add 8 and 5 hours.</li>
+</ul></li>
+<li><p>2.2. Parse dates and times to numbers.</p></li>
+<li><p>2.3. Transform times and dates:</p>
+<ul>
+<li><p>Change time: Add time, use modulo to control the amount of hours that go over to the next day; amount of time is a condition of timezone.</p></li>
+<li><p>Change date: Use a calendar function to get the next day (might be a different month, a leap year…) IF there are remainder hours (over 24).</p></li>
+<li><p>Change timezone</p></li>
+</ul></li>
+</ul>
+</div>
+<div id="join" class="section level4">
+<h4>3. Join</h4>
+<p>Add all columns from advertisers and campaigns into the <em>impression</em> and <em>click</em> data.</p>
+</div>
+<div id="output" class="section level4">
+<h4>4. Output</h4>
+<p>After processing the data the program should write two CSV files <em>impressions_processed.csv</em> and <em>clicks_processed.csv</em></p>
 </div>
 </div>
 </div>
