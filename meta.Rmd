@@ -168,31 +168,41 @@ new_clicks <- mutate(clicks, hours = format(strptime(clicks$time, "%H:%M:%S"),'%
 # hours <- apply(new_clicks, 1, EST_to_UTC)
 # new_clicks$hours2 = hours
 
-convert_timezone <- function(x){
-  #print(x)
-  hour <- as.numeric(get_hour(x["time"]))
-  #print(x["timezone"])
-  if(x["timezone"] == "Eastern time"){
-    hour <- hour + 5
-  } 
-  if(x["timezone"] == "Pacific time"){
-    hour <- hour + 8
-  }
-  #print(hour)
-  if(hour >= 24){ #if the hour is 24 or more, then it restarts from 0 and date is +1
-    hour <- (hour %% 24)
-    x["date"] <- as.Date(x["date"]) + 1
-  }
-  new_time <- paste(str_pad(hour, width=2, pad="0"), get_mins_secs(x["time"]),  sep=":")
-  #print(new_time)
-  return(new_time)
+time_format <- function(hour, x) {
+    if(hour >= 24){ #if the hour is 24 or more, then it restarts from 0 (and date is +1, handled elsewhere)
+      hour <- (hour %% 24)
+    }
+    new_time <- paste(str_pad(hour, width=2, pad="0"), get_mins_secs(x["time"]),  sep=":")
+    return(new_time)
 }
 
-new_times <- apply(new_clicks, 1, convert_timezone)
-new_clicks$new_times = new_times
+# x is the row
+convert_timezone <- function(x){
+  hour <- x["time"]
+  if(x["timezone"] != "UTC"){
+    hour <- as.numeric(get_hour(hour))
+    if(x["timezone"] == "Eastern time"){
+      hour <- hour + 5
+    } 
+    if(x["timezone"] == "Pacific time"){
+      hour <- hour + 8
+    }
+    hour <- time_format(hour, x)
+  }
+  return(hour)
+}
 
+convert_dates <- function(x){
+  is_different_date <- get_hour(x["new_time"]) <  get_hour(x["time"])
+  return(ifelse(is_different_date, format(as.Date(x["date"]) + 1),  x["date"]))
+}
 
+new_times <- apply(clicks, 1, convert_timezone)
+clicks2 <- mutate(clicks, new_time=new_times) 
+new_dates <- apply(clicks2, 1, convert_dates)
+clicks2$new_dates = new_dates
 
+# as.Date(clicks2$time[2], format="%H:%M:%S") >= as.Date(clicks2$time[2], format="%H:%M:%S")
 #apply(clicks, 1, get_hour2) # 1 indicates apply over rows
 
 #hours <- format(strptime(clicks$time,"%H:%M:%S"),'%H')
