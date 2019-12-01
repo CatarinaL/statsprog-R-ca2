@@ -202,10 +202,15 @@ clicks2 <- mutate(clicks, new_time=new_times)
 new_dates <- apply(clicks2, 1, convert_dates)
 clicks2$new_dates = new_dates
 
+
 # as.Date(clicks2$time[2], format="%H:%M:%S") >= as.Date(clicks2$time[2], format="%H:%M:%S")
 #apply(clicks, 1, get_hour2) # 1 indicates apply over rows
 
 #hours <- format(strptime(clicks$time,"%H:%M:%S"),'%H')
+
+new_clicks <- mutate(clicks, time=clicks2$new_time, date=clicks2$new_dates, timezone="UTC") %>% left_join(campaigns, by = c("campaign_id" = "id")) %>% left_join(advertisers, by = c("advertiser_id" = "ID")) %>% rename(campaign_name = name.x, advertiser_name = name.y)
+
+write_csv(new_clicks, "clicks_processed.csv")
 
 ```
 

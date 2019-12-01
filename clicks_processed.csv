@@ -1,0 +1,15 @@
+campaign_id,date,time,timezone,advertiser_id,campaign_name,budget,advertiser_name
+99870,2018-11-01,00:05:00,UTC,11354,Christmas cheer,15000,Coco Cola
+99870,2018-11-03,04:00:00,UTC,11354,Christmas cheer,15000,Coco Cola
+99870,2018-11-06,01:30:00,UTC,11354,Christmas cheer,15000,Coco Cola
+99870,2018-11-02,17:00:00,UTC,11354,Christmas cheer,15000,Coco Cola
+56444,2018-11-02,10:35:00,UTC,73453,Run of network,1000,Ninetendo
+56444,2018-11-02,18:10:00,UTC,73453,Run of network,1000,Ninetendo
+56444,2018-11-05,07:00:00,UTC,73453,Run of network,1000,Ninetendo
+56444,2018-11-05,23:45:00,UTC,73453,Run of network,1000,Ninetendo
+55112,2018-11-05,22:50:00,UTC,34523,Q4 performance,250000,Lever Brows
+55112,2018-11-03,06:50:00,UTC,34523,Q4 performance,250000,Lever Brows
+55112,2018-11-03,16:35:00,UTC,34523,Q4 performance,250000,Lever Brows
+55112,2018-11-05,16:30:00,UTC,34523,Q4 performance,250000,Lever Brows
+55112,2018-11-02,04:30:00,UTC,34523,Q4 performance,250000,Lever Brows
+55112,2018-11-05,19:25:00,UTC,34523,Q4 performance,250000,Lever Brows
