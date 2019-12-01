@@ -45,27 +45,9 @@ Download a sample data set at this link. This is representative of the data sets
 
 
 #### 1. Import
-Extract the sample data-set zip file to a folder. Your program does not need to extract the zip file, but it should import the four files without any modification by any other program.
+> Extract the sample data-set zip file to a folder. Your program does not need to extract the zip file, but it should import the four files without any modification by any other program.
 
-
-
-#### 2. Transform
-_Impression_ and _click_ data both have date, time and timezone variables. Transform dates and times so that all data that the program outputs is in the UTC time zone.
-You must write the logic for this transformation yourself. Using a 3rd party package such as lubridate will be heavily penalised (see Rubric).
-
-You can use existing R functions to parse the elements out of a timestamp e.g. hour or date, however you must write the code that adds/subtracts hours, days etc. 
-
-
-
-#### 3. Join
-Add all columns from advertisers and campaigns into the _impression_ and _click_ data.
-
-
-
-#### 4. Output
-After processing the data the program should write two CSV files _impressions_processed.csv_ and _clicks_processed.csv_
-
-***
+* Set up the libraries used. 
 
 ```{R, echo=FALSE, include=FALSE}
 # Install Tidyverse from CRAN
@@ -77,11 +59,12 @@ library(readr)
 library(dplyr)
 library(tidyr)
 library(magrittr)
+library(stringr)
 #library(ggplot2)
 
 ```
 
-* Step 1, importing files with correct column specifications:
+* Importing files with correct column specifications:
 
 ```{R, echo=TRUE, include=TRUE}
 # Load files into tibbles (using readr functions)
@@ -106,8 +89,10 @@ clicks <- read_tsv("data/clicks.tsv",
                         col_types = 
                           cols(
                             campaign_id = col_character(),
-                            date = col_date(format = "%d/%m/%Y") 
+                            time = col_time(format = "%H:%M:%S"),
+                            date = col_date(format = "%d/%m/%Y")
                             #date format needs to be specified because the original doesn't conform to ISO standard
+                            
                             )
                    )
 
@@ -115,6 +100,7 @@ impressions <- read_tsv("data/impressions.tsv",
                         col_types = 
                           cols(
                             campaign_id = col_character(),
+                            time = col_time(format = "%H:%M:%S"),
                             date = col_date(format = "%d/%m/%Y")
                             )
                         )
@@ -123,8 +109,103 @@ impressions <- read_tsv("data/impressions.tsv",
 
 See readr's (reference on parsing dates and times)[https://readr.tidyverse.org/reference/parse_datetime.html] 
 
+***
 
-```{R, echo=FALSE, include=TRUE}
+#### 2. Transform
+> _Impression_ and _click_ data both have date, time and timezone variables. Transform dates and times so that all data that the program outputs is in the UTC time zone.
+You must write the logic for this transformation yourself. Using a 3rd party package such as lubridate will be heavily penalised (see Rubric).
+
+> You can use existing R functions to parse the elements out of a timestamp e.g. hour or date, however you must write the code that adds/subtracts hours, days etc. 
+
+Three columns of interest: time, date and timezone.
+
+* 2.1. Filter rows by timezones:
+
+  + 3 types of timezone: UTC, Eastern Time (EST) and Pacific Time (PST). 
+  + PST time zone offset is UTC-08. 
+  + EST is UTC-05. 
+  + To transform these to UTC, add 8 or 5 hours.
+
+
+* 2.2. Parse dates and times to numbers.
+
+* 2.3. Transform times and dates:
+
+  + Change time: Add time, use modulo to control the amount of hours that go over to the next day; amount of time is a condition of timezone.
+  
+  + Change date: Use a calendar function to get the next day (might be a different month, a leap year...) IF there are remainder hours (over 24). Base R has as.Date() function.
+  
+  + Change timezone
+
+
+
+```{R, echo=TRUE, include=TRUE}
+
+# get_hour2 <- function(timestamp){
+#   return(unlist(strsplit(as.character(timestamp["time"]), "[:]"))[1])
+# }
+
+get_hour <- function(x){
+  format(strptime(x, "%H:%M:%S"),'%H')
+}
+
+get_mins_secs <- function(x){
+  format(strptime(x, "%H:%M:%S"),'%M:%S')
+}
+
+new_clicks <- mutate(clicks, hours = format(strptime(clicks$time, "%H:%M:%S"),'%H'))
+# 
+# new_clicks <- mutate(new_clicks, hours2 = EST_to_UTC(new_clicks$hours))
+
+# EST_to_UTC <- function(x){
+#   result <- as.numeric(get_hour(x["time"])) + 5
+#   if(result %% 24){
+#     result <- (result %% 24)
+#   }
+#   return(str(result))
+# }
+
+# hours <- apply(new_clicks, 1, EST_to_UTC)
+# new_clicks$hours2 = hours
+
+convert_timezone <- function(x){
+  #print(x)
+  hour <- as.numeric(get_hour(x["time"]))
+  #print(x["timezone"])
+  if(x["timezone"] == "Eastern time"){
+    hour <- hour + 5
+  } 
+  if(x["timezone"] == "Pacific time"){
+    hour <- hour + 8
+  }
+  #print(hour)
+  if(hour >= 24){ #if the hour is 24 or more, then it restarts from 0 and date is +1
+    hour <- (hour %% 24)
+    x["date"] <- as.Date(x["date"]) + 1
+  }
+  new_time <- paste(str_pad(hour, width=2, pad="0"), get_mins_secs(x["time"]),  sep=":")
+  #print(new_time)
+  return(new_time)
+}
+
+new_times <- apply(new_clicks, 1, convert_timezone)
+new_clicks$new_times = new_times
+
+
+
+#apply(clicks, 1, get_hour2) # 1 indicates apply over rows
+
+#hours <- format(strptime(clicks$time,"%H:%M:%S"),'%H')
 
 ```
 
+
+
+
+#### 3. Join
+Add all columns from advertisers and campaigns into the _impression_ and _click_ data.
+
+
+
+#### 4. Output
+After processing the data the program should write two CSV files _impressions_processed.csv_ and _clicks_processed.csv_
